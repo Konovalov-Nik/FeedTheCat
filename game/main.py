@@ -16,6 +16,18 @@ ICON_IMAGE = None
 CAT_IMAGE_PATH = "assets/cat.png"
 CAT_IMAGE = None
 
+POOP_UNICORN_IMAGE_PATH = "assets/poop_unicorn.png"
+POOP_UNICORN_IMAGE = None
+
+DOG_IMAGE_PATH = "assets/dog.png"
+DOG_IMAGE = None
+
+CAPYBARA_IMAGE_PATH = "assets/capybara.png"
+CAPYBARA_IMAGE = None
+
+BUNNY_IMAGE_PATH = "assets/bunny.png"
+BUNNY_IMAGE = None
+
 FOOD_FISH_IMAGE_PATH = "assets/fish.png"
 FOOD_FISH_IMAGE = None
 
@@ -35,9 +47,23 @@ END_TIME = None
 
 GAME_IN_PROGRESS = False
 
+SELECTED_CHARACTER = None
+
 def load_assets():
     global CAT_IMAGE
     CAT_IMAGE = pygame.image.load(CAT_IMAGE_PATH)
+
+    global POOP_UNICORN_IMAGE
+    POOP_UNICORN_IMAGE = pygame.image.load(POOP_UNICORN_IMAGE_PATH)
+
+    global DOG_IMAGE
+    DOG_IMAGE = pygame.image.load(DOG_IMAGE_PATH)
+
+    global CAPYBARA_IMAGE
+    CAPYBARA_IMAGE = pygame.image.load(CAPYBARA_IMAGE_PATH)
+
+    global BUNNY_IMAGE
+    BUNNY_IMAGE = pygame.image.load(BUNNY_IMAGE_PATH)
 
     global FOOD_FISH_IMAGE
     FOOD_FISH_IMAGE = pygame.image.load(FOOD_FISH_IMAGE_PATH)
@@ -69,10 +95,13 @@ def start_game():
 
     global END_TIME
     END_TIME = None
+
 def draw_start_screen(screen):
     font = pygame.font.SysFont("Arial", 24)
     text = font.render("Нажмите пробел чтобы начать игру", True, (0, 0, 0))
     screen.blit(text, (DISPALY_WIDTH / 2 - text.get_width() / 2, DISPALY_HEIGHT / 2 - text.get_height() / 2))
+
+    draw_available_characters(screen)
 
 def draw_character(screen, x, y, character=CAT_IMAGE):
     screen.blit(character, (x, y))
@@ -104,10 +133,11 @@ def draw_score(screen, score):
 
 def check_collision_food():
     global SCORE
+    global SELECTED_CHARACTER
     for food in FOOD_COORDS:
-        if food[1] + FOOD_FISH_IMAGE.get_height() >= DISPALY_HEIGHT - CAT_IMAGE.get_height() \
+        if food[1] + FOOD_FISH_IMAGE.get_height() >= DISPALY_HEIGHT - SELECTED_CHARACTER.get_height() \
             and food[0] + FOOD_FISH_IMAGE.get_width() >= CHARACTER_X \
-            and food[0] <= CHARACTER_X + CAT_IMAGE.get_width():
+            and food[0] <= CHARACTER_X + SELECTED_CHARACTER.get_width():
             
             SCORE += 1
             FOOD_COORDS.remove(food)
@@ -126,6 +156,58 @@ def draw_win(screen):
     text = font.render(f"Игра окончена! {pretty_time_delta} чтобы набрать {TARGET_SCORE} очков", True, (0, 0, 0))
     screen.blit(text, (DISPALY_WIDTH / 2 - text.get_width() / 2, DISPALY_HEIGHT / 2 - text.get_height() / 2))
 
+    draw_available_characters(screen)
+
+def draw_available_characters(screen):
+    max_height = get_max_character_height()
+    
+    draw_character(screen, 0, 0, CAT_IMAGE)
+    #draw assigned number under image  
+    font = pygame.font.SysFont("Arial", 24)
+    text = font.render("1", True, (0, 0, 0))
+    screen.blit(text, (CAT_IMAGE.get_width() / 2 - text.get_width() / 2, max_height ))
+    
+    draw_character(screen, CAT_IMAGE.get_width(), 0, POOP_UNICORN_IMAGE)
+    #draw assigned number under image  
+    font = pygame.font.SysFont("Arial", 24)
+    text = font.render("2", True, (0, 0, 0))
+    screen.blit(text, (CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() / 2 - text.get_width() / 2, max_height ))
+
+    draw_character(screen, CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width(), 0, DOG_IMAGE)
+    #draw assigned number under image
+    font = pygame.font.SysFont("Arial", 24)
+    text = font.render("3", True, (0, 0, 0))
+    screen.blit(text, (CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() + DOG_IMAGE.get_width() / 2 - text.get_width() / 2, max_height ))
+
+    draw_character(screen, CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() + DOG_IMAGE.get_width(), 0, CAPYBARA_IMAGE)
+    #draw assigned number under image
+    font = pygame.font.SysFont("Arial", 24)
+    text = font.render("4", True, (0, 0, 0))
+    screen.blit(text, (CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() + DOG_IMAGE.get_width() + CAPYBARA_IMAGE.get_width() / 2 - text.get_width() / 2, max_height ))
+
+    draw_character(screen, CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() + DOG_IMAGE.get_width() + CAPYBARA_IMAGE.get_width(), 0, BUNNY_IMAGE)
+    #draw assigned number under image
+    font = pygame.font.SysFont("Arial", 24)
+    text = font.render("5", True, (0, 0, 0))
+    screen.blit(text, (CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() + DOG_IMAGE.get_width() + CAPYBARA_IMAGE.get_width() + BUNNY_IMAGE.get_width() / 2 - text.get_width() / 2, max_height ))
+
+    draw_selected_character(screen)
+
+
+def draw_selected_character(screen):
+    max_character_height = get_max_character_height()
+    
+    global SELECTED_CHARACTER
+    #draw in the middle widht above the characters
+    font = pygame.font.SysFont("Arial", 24)
+    text = font.render("Выбран персонаж:", True, (0, 0, 0))
+    screen.blit(text, (DISPALY_WIDTH / 2 - text.get_width() / 2, max_character_height * 2))
+
+    draw_character(screen, DISPALY_WIDTH / 2 - SELECTED_CHARACTER.get_width() / 2, max_character_height * 2 + text.get_height(), SELECTED_CHARACTER)
+
+def get_max_character_height():
+    return max(CAT_IMAGE.get_height(), POOP_UNICORN_IMAGE.get_height(), DOG_IMAGE.get_height(), CAPYBARA_IMAGE.get_height(), BUNNY_IMAGE.get_height())
+
 def main():
     load_assets()
     pygame.init()
@@ -142,6 +224,9 @@ def main():
 
     global START_TIME
     START_TIME = datetime.datetime.now()
+
+    global SELECTED_CHARACTER
+    SELECTED_CHARACTER = CAT_IMAGE
     
     while pygame_eloop_running:
         clock.tick(60)
@@ -151,6 +236,16 @@ def main():
                 pygame_eloop_running = False
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1 and not GAME_IN_PROGRESS:
+                    SELECTED_CHARACTER = CAT_IMAGE
+                if event.key == pygame.K_2 and not GAME_IN_PROGRESS:
+                    SELECTED_CHARACTER = POOP_UNICORN_IMAGE 
+                if event.key == pygame.K_3 and not GAME_IN_PROGRESS:
+                    SELECTED_CHARACTER = DOG_IMAGE
+                if event.key == pygame.K_4 and not GAME_IN_PROGRESS:
+                    SELECTED_CHARACTER = CAPYBARA_IMAGE
+                if event.key == pygame.K_5 and not GAME_IN_PROGRESS:
+                    SELECTED_CHARACTER = BUNNY_IMAGE
                 if event.key == pygame.K_LEFT:
                     if CHARACTER_X > 5:
                         X_SPEED = -5
@@ -188,7 +283,7 @@ def main():
         if GAME_IN_PROGRESS:    
             CHARACTER_X += X_SPEED    
             check_collision_food()
-            draw_character(screen, CHARACTER_X, DISPALY_HEIGHT - CAT_IMAGE.get_height(), CAT_IMAGE)
+            draw_character(screen, CHARACTER_X, DISPALY_HEIGHT - SELECTED_CHARACTER.get_height(), SELECTED_CHARACTER)
             update_food()
             draw_all_food(screen, FOOD_FISH_IMAGE)
             draw_score(screen, SCORE)
