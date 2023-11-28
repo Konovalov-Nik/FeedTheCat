@@ -28,6 +28,9 @@ CAPYBARA_IMAGE = None
 BUNNY_IMAGE_PATH = "assets/bunny.png"
 BUNNY_IMAGE = None
 
+CAKE_IMAGE_PATH = "assets/cake.png"
+CAKE_IMAGE = None
+
 FOOD_FISH_IMAGE_PATH = "assets/fish.png"
 FOOD_FISH_IMAGE = None
 
@@ -64,6 +67,9 @@ def load_assets():
 
     global BUNNY_IMAGE
     BUNNY_IMAGE = pygame.image.load(BUNNY_IMAGE_PATH)
+
+    global CAKE_IMAGE
+    CAKE_IMAGE = pygame.image.load(CAKE_IMAGE_PATH)
 
     global FOOD_FISH_IMAGE
     FOOD_FISH_IMAGE = pygame.image.load(FOOD_FISH_IMAGE_PATH)
@@ -191,6 +197,12 @@ def draw_available_characters(screen):
     text = font.render("5", True, (0, 0, 0))
     screen.blit(text, (CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() + DOG_IMAGE.get_width() + CAPYBARA_IMAGE.get_width() + BUNNY_IMAGE.get_width() / 2 - text.get_width() / 2, max_height ))
 
+    draw_character(screen, CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() + DOG_IMAGE.get_width() + CAPYBARA_IMAGE.get_width() + BUNNY_IMAGE.get_width(), 0, CAKE_IMAGE)
+    #draw assigned number under image
+    font = pygame.font.SysFont("Arial", 24)
+    text = font.render("6", True, (0, 0, 0))
+    screen.blit(text, (CAT_IMAGE.get_width() + POOP_UNICORN_IMAGE.get_width() + DOG_IMAGE.get_width() + CAPYBARA_IMAGE.get_width() + BUNNY_IMAGE.get_width() + CAKE_IMAGE.get_width() / 2 - text.get_width() / 2, max_height ))
+
     draw_selected_character(screen)
 
 
@@ -206,7 +218,7 @@ def draw_selected_character(screen):
     draw_character(screen, DISPALY_WIDTH / 2 - SELECTED_CHARACTER.get_width() / 2, max_character_height * 2 + text.get_height(), SELECTED_CHARACTER)
 
 def get_max_character_height():
-    return max(CAT_IMAGE.get_height(), POOP_UNICORN_IMAGE.get_height(), DOG_IMAGE.get_height(), CAPYBARA_IMAGE.get_height(), BUNNY_IMAGE.get_height())
+    return max(CAT_IMAGE.get_height(), POOP_UNICORN_IMAGE.get_height(), DOG_IMAGE.get_height(), CAPYBARA_IMAGE.get_height(), BUNNY_IMAGE.get_height(), CAKE_IMAGE.get_height())
 
 def main():
     load_assets()
@@ -246,6 +258,9 @@ def main():
                     SELECTED_CHARACTER = CAPYBARA_IMAGE
                 if event.key == pygame.K_5 and not GAME_IN_PROGRESS:
                     SELECTED_CHARACTER = BUNNY_IMAGE
+                if event.key == pygame.K_6 and not GAME_IN_PROGRESS:
+                    SELECTED_CHARACTER = CAKE_IMAGE
+                
                 if event.key == pygame.K_LEFT:
                     if CHARACTER_X > 5:
                         X_SPEED = -5
